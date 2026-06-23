@@ -1,0 +1,2523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prince Dr. K. Vasudevan College of Engineering & Technology</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #0d1b3e;
+  --royal: #1a3a8c;
+  --gold: #c9972b;
+  --gold-light: #f0c060;
+  --cream: #faf8f3;
+  --white: #ffffff;
+  --gray: #6b7280;
+  --light: #f1f5f9;
+  --dark: #0a0f1e;
+  --glass: rgba(255,255,255,0.08);
+  --glass-border: rgba(255,255,255,0.15);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--white);
+  color: #1a1a2e;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* Custom Cursor */
+#cursor {
+  width: 12px; height: 12px;
+  background: var(--gold);
+  border-radius: 50%;
+  position: fixed; top: 0; left: 0;
+  pointer-events: none; z-index: 99999;
+  transition: transform 0.1s ease;
+  mix-blend-mode: multiply;
+}
+#cursor-ring {
+  width: 36px; height: 36px;
+  border: 2px solid var(--royal);
+  border-radius: 50%;
+  position: fixed; top: 0; left: 0;
+  pointer-events: none; z-index: 99998;
+  transition: transform 0.15s ease, width 0.3s, height 0.3s;
+}
+
+/* Loading Screen */
+#loader {
+  position: fixed; inset: 0;
+  background: var(--navy);
+  z-index: 99997;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  transition: opacity 0.6s ease, visibility 0.6s;
+}
+#loader.hidden { opacity: 0; visibility: hidden; }
+.loader-crest {
+  width: 80px; height: 80px;
+  border: 3px solid var(--glass-border);
+  border-top-color: var(--gold);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 24px;
+}
+.loader-text {
+  font-family: 'Playfair Display', serif;
+  color: var(--gold);
+  font-size: 1.1rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Particles */
+#particles-canvas {
+  position: fixed; inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.4;
+}
+
+/* Notification Banner */
+#notif-banner {
+  background: linear-gradient(90deg, var(--royal), var(--gold));
+  color: white;
+  text-align: center;
+  padding: 10px 40px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  position: relative;
+  z-index: 1001;
+  letter-spacing: 0.03em;
+}
+#notif-banner a { color: #fff; font-weight: 700; text-decoration: underline; }
+#close-notif {
+  position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
+  background: none; border: none; color: white; font-size: 1.2rem; cursor: pointer;
+}
+
+/* Navbar */
+nav {
+  position: sticky; top: 0; z-index: 1000;
+  background: rgba(13,27,62,0.97);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(201,151,43,0.2);
+  padding: 0 40px;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 70px;
+  transition: all 0.3s;
+}
+nav.scrolled { background: rgba(10,15,30,0.99); box-shadow: 0 4px 30px rgba(0,0,0,0.4); }
+.nav-brand {
+  display: flex; align-items: center; gap: 12px;
+  text-decoration: none;
+}
+.nav-logo-circle {
+  width: 44px; height: 44px;
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem; font-weight: 900;
+  color: #000000;
+  flex-shrink: 0;
+}
+.nav-brand-text { line-height: 1.2; }
+.nav-brand-text span:first-child {
+  display: block;
+  color: var(--gold);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.nav-brand-text span:last-child {
+  display: block;
+  color: white;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+.nav-links {
+  display: flex; gap: 4px; list-style: none;
+  align-items: center;
+}
+.nav-links a {
+  color: rgba(255,255,255,0.8);
+  text-decoration: none;
+  font-size: 0.82rem;
+  font-weight: 500;
+  padding: 6px 12px;
+  border-radius: 6px;
+  transition: all 0.25s;
+  letter-spacing: 0.02em;
+}
+.nav-links a:hover { color: var(--gold); background: rgba(201,151,43,0.1); }
+.nav-cta {
+  background: var(--gold) !important;
+  color: var(--navy) !important;
+  font-weight: 700 !important;
+  border-radius: 8px !important;
+  padding: 8px 18px !important;
+}
+.nav-cta:hover { background: var(--gold-light) !important; transform: translateY(-1px); }
+
+/* Search Bar */
+.nav-search {
+  display: flex; align-items: center;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  padding: 6px 12px; gap: 8px;
+}
+.nav-search input {
+  background: none; border: none; outline: none;
+  color: white; font-size: 0.82rem; width: 140px;
+}
+.nav-search input::placeholder { color: rgba(255,255,255,0.4); }
+.nav-search span { color: rgba(255,255,255,0.5); font-size: 0.9rem; }
+
+/* Hamburger */
+.hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+.hamburger span { width: 24px; height: 2px; background: var(--gold); border-radius: 2px; transition: 0.3s; }
+
+/* Mobile Menu */
+.mobile-menu {
+  display: none;
+  position: fixed; top: 70px; left: 0; right: 0;
+  background: rgba(13,27,62,0.99);
+  padding: 20px;
+  z-index: 999;
+  border-bottom: 1px solid rgba(201,151,43,0.2);
+}
+.mobile-menu.open { display: flex; flex-direction: column; gap: 8px; }
+.mobile-menu a { color: rgba(255,255,255,0.85); text-decoration: none; padding: 12px 16px; border-radius: 8px; font-size: 0.9rem; }
+.mobile-menu a:hover { background: rgba(201,151,43,0.1); color: var(--gold); }
+
+/* Dark Mode Toggle */
+.theme-btn {
+  background: none; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px;
+  color: rgba(255,255,255,0.7); padding: 6px 10px; cursor: pointer;
+  font-size: 0.85rem; transition: 0.2s;
+}
+.theme-btn:hover { border-color: var(--gold); color: var(--gold); }
+
+/* Hero */
+#home {
+  position: relative;
+  min-height: 100vh;
+  background: linear-gradient(135deg, var(--navy) 0%, #0a1628 40%, #13254a 100%);
+  display: flex; align-items: center;
+  overflow: hidden;
+}
+.hero-bg-pattern {
+  position: absolute; inset: 0;
+  background-image:
+    radial-gradient(circle at 20% 80%, rgba(201,151,43,0.15) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(26,58,140,0.4) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(201,151,43,0.05) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-grid-lines {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(201,151,43,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201,151,43,0.05) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+}
+.hero-content {
+  position: relative; z-index: 2;
+  max-width: 1200px; margin: 0 auto; padding: 0 40px;
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 60px; align-items: center; width: 100%;
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(201,151,43,0.15);
+  border: 1px solid rgba(201,151,43,0.3);
+  border-radius: 100px;
+  padding: 6px 16px;
+  color: var(--gold-light);
+  font-size: 0.78rem; font-weight: 600;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  margin-bottom: 24px;
+  animation: fadeInUp 0.8s ease forwards;
+}
+.hero-badge::before { content: '★'; font-size: 0.7rem; }
+h1.hero-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.2rem, 4vw, 3.6rem);
+  font-weight: 900;
+  color: white;
+  line-height: 1.15;
+  margin-bottom: 20px;
+  animation: fadeInUp 0.8s 0.1s ease both;
+}
+h1.hero-title .gold { color: var(--gold); }
+.hero-tagline {
+  font-size: 1.05rem;
+  color: rgba(255,255,255,0.65);
+  line-height: 1.7;
+  margin-bottom: 32px;
+  animation: fadeInUp 0.8s 0.2s ease both;
+}
+.typing-wrap {
+  color: var(--gold-light); font-weight: 600;
+  border-right: 2px solid var(--gold-light);
+  animation: blink 0.75s step-end infinite;
+}
+@keyframes blink { 50% { border-color: transparent; } }
+.hero-btns {
+  display: flex; gap: 16px; flex-wrap: wrap;
+  animation: fadeInUp 0.8s 0.3s ease both;
+  margin-bottom: 40px;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  color: #000000;
+  border: none; border-radius: 10px;
+  padding: 14px 28px;
+  font-size: 0.9rem; font-weight: 700;
+  cursor: pointer; text-decoration: none;
+  display: inline-flex; align-items: center; gap: 8px;
+  transition: all 0.3s;
+  box-shadow: 0 8px 24px rgba(201,151,43,0.3);
+}
+.btn-primary:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(201,151,43,0.45); }
+.btn-outline {
+  background: transparent;
+  color: white;
+  border: 1.5px solid rgba(255,255,255,0.3);
+  border-radius: 10px;
+  padding: 14px 28px;
+  font-size: 0.9rem; font-weight: 600;
+  cursor: pointer; text-decoration: none;
+  display: inline-flex; align-items: center; gap: 8px;
+  transition: all 0.3s;
+}
+.btn-outline:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-3px); }
+.hero-meta {
+  display: flex; gap: 32px;
+  animation: fadeInUp 0.8s 0.4s ease both;
+}
+.hero-meta-item { text-align: left; }
+.hero-meta-item .num {
+  font-size: 1.8rem; font-weight: 700;
+  color: var(--gold); font-family: 'Playfair Display', serif;
+}
+.hero-meta-item .label {
+  font-size: 0.72rem; color: rgba(255,255,255,0.5);
+  text-transform: uppercase; letter-spacing: 0.08em;
+}
+.hero-visual {
+  position: relative;
+  animation: fadeInRight 1s 0.3s ease both;
+}
+.hero-img-frame {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 40px 80px rgba(0,0,0,0.5);
+}
+.hero-img-frame img {
+  width: 100%; height: 460px;
+  object-fit: cover;
+  display: block;
+}
+.hero-img-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(13,27,62,0.3), transparent);
+}
+.hero-floating-card {
+  position: absolute;
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 14px;
+  padding: 14px 18px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+  display: flex; align-items: center; gap: 12px;
+  animation: float 3s ease-in-out infinite;
+}
+.hero-fc1 { bottom: 30px; left: -30px; }
+.hero-fc2 { top: 30px; right: -20px; animation-delay: 1.5s; }
+.hero-floating-card .fc-icon {
+  width: 40px; height: 40px;
+  border-radius: 10px; display: flex; align-items: center; justify-content: center;
+  font-size: 1.2rem;
+}
+.fc-blue { background: linear-gradient(135deg, #4f46e5, #7c3aed); }
+.fc-green { background: linear-gradient(135deg, #059669, #10b981); }
+.hero-floating-card .fc-text .main { font-size: 0.85rem; font-weight: 700; color: #1a1a2e; }
+.hero-floating-card .fc-text .sub { font-size: 0.7rem; color: #6b7280; }
+.scroll-indicator {
+  position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  color: rgba(255,255,255,0.4); font-size: 0.7rem; letter-spacing: 0.1em;
+  animation: bounce 2s ease infinite;
+}
+.scroll-indicator::after { content: '↓'; font-size: 1.2rem; color: var(--gold); }
+@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+@keyframes fadeInUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
+@keyframes fadeInRight { from{opacity:0;transform:translateX(40px)} to{opacity:1;transform:translateX(0)} }
+@keyframes bounce { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(6px)} }
+
+/* Section Styles */
+section { position: relative; z-index: 1; }
+.section-label {
+  font-size: 0.72rem; font-weight: 700;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 10px;
+  display: flex; align-items: center; gap: 10px;
+}
+.section-label::before { content: ''; width: 32px; height: 2px; background: var(--gold); }
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+  font-weight: 700;
+  color: #c9972b;
+  line-height: 1.2;
+  margin-bottom: 16px;
+}
+.section-desc {
+  color: var(--gray);
+  font-size: 1rem; line-height: 1.7;
+  max-width: 560px;
+}
+
+
+.container { max-width: 1200px; margin: 0 auto; padding: 0 40px; }
+
+/* Stats */
+#stats {
+  background: linear-gradient(135deg, var(--navy), #0f2060);
+  padding: 80px 0;
+}
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2px;
+}
+.stat-card {
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  padding: 40px 30px;
+  text-align: center;
+  position: relative;
+  transition: all 0.3s;
+}
+.stat-card:hover { background: rgba(255,255,255,0.12); transform: translateY(-4px); }
+.stat-card .stat-icon { font-size: 2rem; margin-bottom: 12px; }
+.stat-card .stat-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 3rem; font-weight: 900;
+  color: var(--gold);
+  line-height: 1;
+  display: flex; justify-content: center; align-items: baseline; gap: 4px;
+}
+.stat-card .stat-suf { font-size: 1.5rem; }
+.stat-card .stat-label {
+  color: rgba(255,255,255,0.6);
+  font-size: 0.8rem; letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-top: 10px;
+}
+
+/* About */
+#about { padding: 100px 0; background: var(--cream); }
+.about-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 80px; align-items: center;
+}
+.about-image-stack { position: relative; }
+.about-img-main {
+  width: 100%; height: 480px;
+  object-fit: cover;
+  border-radius: 20px;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.15);
+}
+.about-img-accent {
+  position: absolute;
+  width: 200px; height: 200px;
+  object-fit: cover;
+  border-radius: 16px;
+  border: 6px solid white;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+  bottom: -30px; right: -30px;
+}
+.about-badge-card {
+  position: absolute; top: 30px; left: -30px;
+  background: var(--navy);
+  color: white; border-radius: 14px;
+  padding: 16px 20px;
+  box-shadow: 0 20px 40px rgba(13,27,62,0.3);
+}
+.about-badge-card .yrs {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.5rem; font-weight: 900; color: var(--gold);
+  line-height: 1;
+}
+.about-badge-card .yrs-label {
+  font-size: 0.72rem; color: rgba(255,255,255,0.6);
+  text-transform: uppercase; letter-spacing: 0.08em;
+}
+.accreditation-row {
+  display: flex; gap: 16px; flex-wrap: wrap; margin-top: 28px;
+}
+.accred-chip {
+  background: rgba(26,58,140,0.08);
+  border: 1px solid rgba(26,58,140,0.2);
+  border-radius: 100px; padding: 6px 16px;
+  font-size: 0.8rem; font-weight: 600; color: var(--royal);
+}
+.timeline {
+  margin-top: 32px;
+  display: flex; flex-direction: column; gap: 0;
+  border-left: 2px solid rgba(201,151,43,0.2);
+  padding-left: 24px;
+}
+.timeline-item {
+  position: relative; padding: 12px 0;
+}
+.timeline-item::before {
+  content: '';
+  position: absolute; left: -31px; top: 20px;
+  width: 10px; height: 10px;
+  background: var(--gold); border-radius: 50%;
+  border: 2px solid white;
+  box-shadow: 0 0 0 3px rgba(201,151,43,0.2);
+}
+.timeline-item .year { font-size: 0.78rem; color: var(--gold); font-weight: 700; letter-spacing: 0.08em; }
+.timeline-item .event { font-size: 0.9rem; color: #374151; font-weight: 500; }
+
+/* Departments */
+#departments { padding: 100px 0; background: var(--navy); }
+#departments .section-label,
+#departments .section-title,
+#departments .dept-card-body h3,
+#departments .dept-card-body p,
+#departments .filter-btn {
+  color: white;
+}
+#departments .dept-card {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.15);
+}
+#departments .dept-tag {
+  background: rgba(255,255,255,0.08);
+  color: white;
+}
+.dept-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 50px; }
+.dept-filter {
+  display: flex; gap: 8px;
+}
+.filter-btn {
+  padding: 8px 18px; border-radius: 100px;
+  border: 1.5px solid rgba(255,255,255,0.18);
+  background: rgba(255,255,255,0.08); font-size: 0.82rem; font-weight: 600;
+  cursor: pointer; transition: all 0.2s;
+}
+.filter-btn.active, .filter-btn:hover {
+  background: var(--royal); color: white; border-color: var(--royal);
+}
+.dept-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.dept-card {
+  background: white;
+  border: 1px solid rgba(0, 0, 0, 0.07);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: all 0.3s;
+  opacity: 1; transform: translateY(0);
+}
+.dept-card.hidden { display: none; }
+.dept-card:hover { box-shadow: 0 20px 50px rgba(0,0,0,0.12); transform: translateY(-6px); }
+.dept-card-banner {
+  height: 120px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 3rem;
+  position: relative; overflow: hidden;
+}
+.dept-card-body { padding: 22px; }
+.dept-card-body h3 {
+  font-size: 0.95rem; font-weight: 700; color: var(--navy);
+  margin-bottom: 8px; line-height: 1.4;
+}
+.dept-card-body p {
+  font-size: 0.82rem; color: var(--gray); line-height: 1.6; margin-bottom: 14px;
+}
+.dept-meta { display: flex; gap: 12px; flex-wrap: wrap; }
+.dept-tag {
+  background: var(--light); border-radius: 6px;
+  padding: 4px 10px; font-size: 0.72rem;
+  font-weight: 600; color: var(--royal);
+}
+
+/* Admissions */
+#admissions { padding: 100px 0; background: var(--cream); }
+.admissions-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 60px;
+}
+.fee-table-wrap { overflow-x: auto; }
+.fee-table {
+  width: 100%; border-collapse: collapse;
+  font-size: 0.85rem;
+}
+.fee-table thead th {
+  background: var(--navy); color: white;
+  padding: 14px 18px; text-align: left;
+  font-size: 0.78rem; letter-spacing: 0.06em;
+  text-transform: uppercase; cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+.fee-table thead th:hover { background: var(--royal); }
+.fee-table thead th .sort-icon { margin-left: 6px; opacity: 0.5; }
+.fee-table tbody tr:nth-child(even) { background: rgba(26,58,140,0.03); }
+.fee-table tbody tr:hover { background: rgba(201,151,43,0.05); }
+.fee-table td { padding: 14px 18px; border-bottom: 1px solid rgba(0,0,0,0.05); color: #1f2937; font-weight: 500; }
+.fee-table td strong { color: #0d1b3e; font-weight: 700; }
+.seats-badge {
+  background: rgba(5,150,105,0.1); color: #059669;
+  border-radius: 100px; padding: 3px 10px;
+  font-size: 0.75rem; font-weight: 700;
+}
+.admission-steps { margin-top: 0; }
+.step-item {
+  display: flex; gap: 16px;
+  padding: 16px 0; border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+.step-num {
+  width: 36px; height: 36px; min-width: 36px;
+  background: linear-gradient(135deg, var(--royal), var(--gold));
+  color: white; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 0.82rem;
+}
+.step-text h4 { font-size: 0.9rem; font-weight: 600; color: white; margin-bottom: 3px; }
+.step-text p { font-size: 0.8rem; color: var(--cream); line-height: 1.5; }
+.modal-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.7); backdrop-filter: blur(4px);
+  z-index: 10000; align-items: center; justify-content: center;
+}
+.modal-overlay.open { display: flex; }
+.modal-box {
+  background: white; border-radius: 20px;
+  padding: 40px; max-width: 500px; width: 90%;
+  animation: modalIn 0.3s ease;
+  max-height: 90vh; overflow-y: auto;
+}
+@keyframes modalIn { from{opacity:0;transform:scale(0.9)} to{opacity:1;transform:scale(1)} }
+.modal-box h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem; color: var(--navy); margin-bottom: 24px;
+}
+.form-group { margin-bottom: 16px; }
+.form-group label {
+  display: block; font-size: 0.8rem; font-weight: 600;
+  color: var(--gold); margin-bottom: 6px;
+}
+.form-group input, .form-group select, .form-group textarea {
+  width: 100%; padding: 10px 14px;
+  border: 1.5px solid rgba(0,0,0,0.1); border-radius: 8px;
+  font-size: 0.88rem; outline: none; transition: border 0.2s;
+  font-family: inherit;
+}
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+  border-color: var(--royal);
+}
+.form-error { color: #dc2626; font-size: 0.75rem; margin-top: 4px; display: none; }
+.form-error.show { display: block; }
+.modal-close {
+  float: right; background: none; border: none;
+  font-size: 1.3rem; cursor: pointer; color: var(--gray);
+  margin-top: -10px;
+}
+
+/* Placements */
+#placements { padding: 100px 0; background: white; }
+.placement-stats-row {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 24px; margin-bottom: 50px;
+}
+.placement-stat-card {
+  border-radius: 16px; padding: 32px;
+  text-align: center; position: relative; overflow: hidden;
+}
+.ps-blue { background: linear-gradient(135deg, #eff6ff, #dbeafe); }
+.ps-green { background: linear-gradient(135deg, #f0fdf4, #dcfce7); }
+.ps-purple { background: linear-gradient(135deg, #faf5ff, #ede9fe); }
+.placement-stat-card .ps-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.5rem; font-weight: 900; color: var(--navy);
+}
+.placement-stat-card .ps-label {
+  font-size: 0.82rem; color: var(--gray); margin-top: 6px; font-weight: 500;
+}
+.recruiters-title {
+  font-size: 0.8rem; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--gray); font-weight: 600; margin-bottom: 24px;
+}
+.recruiter-logos {
+  display: flex; flex-wrap: wrap; gap: 16px; align-items: center;
+}
+.recruiter-logo {
+  background: var(--light); border-radius: 10px;
+  padding: 12px 24px;
+  font-size: 0.82rem; font-weight: 700; color: var(--navy);
+  border: 1px solid rgba(0,0,0,0.06);
+  transition: all 0.2s;
+}
+.recruiter-logo:hover { border-color: var(--royal); color: var(--royal); transform: translateY(-2px); }
+
+/* Facilities */
+#facilities { padding: 100px 0; background: var(--cream); }
+.facilities-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.facility-card {
+  background: linear-gradient(135deg, rgba(26,58,140,0.18), rgba(201,151,43,0.12)); border-radius: 16px;
+  padding: 32px 28px;
+  border: 1px solid rgba(201,151,43,0.28);
+  box-shadow: 0 12px 30px rgba(13,27,62,0.12);
+  transition: all 0.3s;
+  cursor: default;
+}
+.facility-card:hover {
+  transform: scale(1.04) translateY(-4px);
+  box-shadow: 0 26px 60px rgba(13,27,62,0.18);
+  border-color: rgba(255,209,132,0.5);
+  background: linear-gradient(135deg, rgba(26,58,140,0.25), rgba(201,151,43,0.18));
+}
+.facility-icon {
+  font-size: 2.4rem; margin-bottom: 16px;
+  display: block;
+}
+.facility-card h3 { font-size: 1rem; font-weight: 700; color: white; margin-bottom: 8px; }
+.facility-card p { font-size: 0.85rem; color: rgba(255,255,255,0.9); line-height: 1.6; }
+
+/* Events */
+#events { padding: 100px 0; background: white; }
+.events-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.event-card {
+  background: linear-gradient(135deg, rgba(26,58,140,0.12), rgba(201,151,43,0.08)); border: 1px solid rgba(201,151,43,0.2); border-radius: 16px;
+  overflow: hidden; transition: all 0.3s;
+}
+.event-card:hover { box-shadow: 0 22px 48px rgba(13,27,62,0.15); transform: translateY(-5px); }
+.event-date-banner {
+  background: linear-gradient(135deg, var(--navy), var(--royal));
+  padding: 20px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.event-date { font-family: 'Playfair Display', serif; color: var(--gold); font-size: 1.8rem; font-weight: 700; }
+.event-month { color: rgba(255,255,255,0.8); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; }
+.event-type-tag {
+  background: rgba(201,151,43,0.22);
+  border: 1px solid rgba(255,255,255,0.18);
+  color: white; border-radius: 100px;
+  padding: 4px 12px; font-size: 0.72rem; font-weight: 600;
+}
+.event-body { padding: 20px; }
+.event-body h3 { font-size: 0.95rem; font-weight: 700; color: white; margin-bottom: 6px; }
+.event-body p { font-size: 0.82rem; color: var(--gold); line-height: 1.5; }
+
+#studentlife .club-card p,
+#studentlife .club-card h4,
+#studentlife .section-desc,
+#events .section-desc,
+#studentlife .section-desc,
+#contact .contact-info-item h4,
+#contact .contact-form-wrap h3,
+#contact .form-group label { color: var(--gold); }
+
+/* Gallery */
+#gallery { padding: 100px 0; background: var(--navy); }
+#gallery .section-title { color: white; }
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(2, 220px);
+  gap: 12px;
+  margin-top: 40px;
+}
+.gallery-item {
+  overflow: hidden; border-radius: 12px; cursor: pointer; position: relative;
+}
+.gallery-item:first-child { grid-column: span 2; grid-row: span 2; }
+.gallery-item img {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform 0.4s ease;
+  display: block;
+}
+.gallery-item:hover img { transform: scale(1.1); }
+.gallery-overlay {
+  position: absolute; inset: 0;
+  background: rgba(13,27,62,0);
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.3s;
+}
+.gallery-item:hover .gallery-overlay { background: rgba(13,27,62,0.4); }
+.gallery-overlay span {
+  color: white; font-size: 2rem; opacity: 0;
+  transition: opacity 0.3s;
+}
+.gallery-item:hover .gallery-overlay span { opacity: 1; }
+
+/* Lightbox */
+#lightbox {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.92); z-index: 20000;
+  align-items: center; justify-content: center;
+}
+#lightbox.open { display: flex; }
+#lightbox-img {
+  max-width: 90vw; max-height: 85vh;
+  border-radius: 12px; box-shadow: 0 40px 80px rgba(0,0,0,0.6);
+  object-fit: contain;
+}
+#lightbox-close {
+  position: fixed; top: 24px; right: 30px;
+  color: white; font-size: 2rem; cursor: pointer;
+  background: rgba(255,255,255,0.1); border: none;
+  width: 44px; height: 44px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  line-height: 1;
+  z-index: 20001;
+}
+
+/* AI Chatbot */
+#chatbot-btn {
+  position: fixed; bottom: 90px; right: 30px;
+  width: 56px; height: 56px;
+  background: linear-gradient(135deg, var(--royal), var(--gold));
+  border-radius: 50%; border: none; cursor: pointer;
+  font-size: 1.4rem; z-index: 5000;
+  box-shadow: 0 8px 24px rgba(26,58,140,0.4);
+  transition: transform 0.2s;
+  display: flex; align-items: center; justify-content: center;
+}
+#chatbot-btn:hover { transform: scale(1.1); }
+#chatbot-window {
+  display: none;
+  position: fixed; bottom: 160px; right: 30px;
+  width: 340px;
+  background: white; border-radius: 20px;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.2);
+  z-index: 5000; overflow: hidden;
+  animation: modalIn 0.3s ease;
+}
+#chatbot-window.open { display: flex; flex-direction: column; }
+.chat-header {
+  background: linear-gradient(135deg, var(--navy), var(--royal));
+  padding: 16px 20px;
+  display: flex; align-items: center; gap: 12px;
+}
+.chat-avatar {
+  width: 36px; height: 36px;
+  background: var(--gold); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem;
+}
+.chat-title { color: white; font-size: 0.9rem; font-weight: 600; }
+.chat-subtitle { color: rgba(255,255,255,0.6); font-size: 0.72rem; }
+#close-chat { margin-left: auto; background: none; border: none; color: rgba(255,255,255,0.7); cursor: pointer; font-size: 1.1rem; }
+#chat-messages {
+  flex: 1; padding: 16px; overflow-y: auto;
+  max-height: 300px;
+  display: flex; flex-direction: column; gap: 12px;
+}
+.chat-msg {
+  max-width: 80%; padding: 10px 14px; border-radius: 14px;
+  font-size: 0.83rem; line-height: 1.5;
+}
+.chat-msg.bot {
+  background: var(--light); color: #374151;
+  border-bottom-left-radius: 4px; align-self: flex-start;
+}
+.chat-msg.user {
+  background: var(--royal); color: white;
+  border-bottom-right-radius: 4px; align-self: flex-end;
+}
+.chat-input-row {
+  padding: 12px 16px; border-top: 1px solid rgba(0,0,0,0.07);
+  display: flex; gap: 10px;
+}
+#chat-input {
+  flex: 1; padding: 9px 14px; border-radius: 10px;
+  border: 1.5px solid rgba(0,0,0,0.1); outline: none;
+  font-size: 0.83rem; font-family: inherit;
+}
+#chat-input:focus { border-color: var(--royal); }
+#chat-send {
+  background: var(--royal); color: white; border: none;
+  border-radius: 10px; padding: 9px 14px; cursor: pointer;
+  font-size: 0.85rem; transition: 0.2s;
+}
+#chat-send:hover { background: var(--navy); }
+.typing-dots { display: flex; gap: 4px; padding: 8px 12px; }
+.typing-dots span {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--gray); animation: dotBounce 1.2s infinite;
+}
+.typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+.typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes dotBounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-6px)} }
+
+/* Company Logos Slideshow */
+#partners {
+  padding: 100px 0;
+  background: linear-gradient(135deg, var(--light), white);
+}
+.partners-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  flex-wrap: wrap;
+  margin-top: 40px;
+}
+.slideshow-wrapper {
+  width: 100%;
+  max-width: 600px;
+  background: white;
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+  position: relative;
+}
+.logo-carousel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 120px;
+  position: relative;
+  overflow: hidden;
+}
+.logo-slide {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.6s ease-in-out;
+}
+.logo-slide.active {
+  opacity: 1;
+  z-index: 2;
+}
+.logo-slide.prev {
+  opacity: 0;
+  z-index: 1;
+}
+.logo-slide img {
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.logo-fallback {
+  display: flex; align-items: center; justify-content: center;
+  width: 100%; height: 100%;
+  font-size: 1.2rem; font-weight: 700; color: var(--navy);
+  background: linear-gradient(135deg, rgba(201,151,43,0.03), rgba(26,58,140,0.02));
+}
+.logo-slide-text {
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--navy);
+  letter-spacing: 0.05em;
+}
+.carousel-nav {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 24px;
+}
+.carousel-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(201, 151, 43, 0.3);
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.carousel-dot.active {
+  background: var(--gold);
+  border-color: var(--gold);
+  width: 28px;
+  border-radius: 5px;
+}
+.carousel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--gold);
+  color: white;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.carousel-arrow:hover {
+  background: var(--gold-light);
+  transform: translateY(-50%) scale(1.1);
+}
+.carousel-arrow.prev {
+  left: 10px;
+}
+.carousel-arrow.next {
+  right: 10px;
+}
+.partners-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+.partner-stat {
+  background: white;
+  border-radius: 14px;
+  padding: 20px;
+  text-align: center;
+  border: 1px solid rgba(201, 151, 43, 0.2);
+}
+.partner-stat .stat-val {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  font-weight: 900;
+  color: var(--gold);
+  margin-bottom: 6px;
+}
+.partner-stat .stat-txt {
+  font-size: 0.85rem;
+  color: var(--gold);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+/* Contact */
+#contact { padding: 100px 0; background: var(--cream); }
+.contact-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 60px;
+}
+.contact-info-item {
+  display: flex; gap: 16px;
+  margin-bottom: 28px;
+}
+.contact-icon {
+  width: 48px; height: 48px; min-width: 48px;
+  background: linear-gradient(135deg, var(--navy), var(--royal));
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.2rem;
+}
+.contact-info-item h4 { font-size: 0.85rem; font-weight: 700; color: var(--gold); margin-bottom: 4px; }
+.contact-info-item p, .contact-info-item a {
+  font-size: 0.85rem; color: var(--gray); line-height: 1.6; text-decoration: none;
+}
+.contact-info-item a:hover { color: var(--royal); }
+.map-placeholder {
+  height: 240px; border-radius: 16px;
+  overflow: hidden;
+  border: 2px solid rgba(26,58,140,0.1);
+  margin-bottom: 28px;
+}
+.map-placeholder iframe { width: 100%; height: 100%; border: none; }
+.contact-form-wrap {
+  background: white; border-radius: 20px;
+  padding: 36px; box-shadow: 0 10px 40px rgba(0,0,0,0.06);
+}
+.contact-form-wrap h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem; color: var(--gold); margin-bottom: 24px;
+}
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+/* Student Life */
+#studentlife { padding: 100px 0; background: white; }
+.clubs-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+.club-card {
+  background: linear-gradient(135deg, rgba(26,58,140,0.15), rgba(201,151,43,0.12));
+  border-radius: 14px; padding: 24px;
+  text-align: center; transition: all 0.3s;
+  cursor: default;
+  border: 1px solid rgba(201,151,43,0.25);
+}
+.club-card:hover {
+  background: linear-gradient(135deg, rgba(26,58,140,0.4), rgba(201,151,43,0.22));
+  transform: translateY(-4px);
+  box-shadow: 0 18px 48px rgba(13,27,62,0.22);
+}
+.club-card:hover h4, .club-card:hover p { color: white; }
+.club-card:hover .club-icon { filter: grayscale(0) brightness(2); }
+.club-icon { font-size: 2rem; margin-bottom: 12px; display: block; }
+.club-card h4 { font-size: 0.9rem; font-weight: 700; color: white; margin-bottom: 4px; }
+.club-card p { font-size: 0.78rem; color: var(--gold); }
+
+/* Achievements */
+#achievements { padding: 100px 0; background: linear-gradient(135deg, var(--navy), #0f2060); }
+#achievements .section-title { color: white; }
+.achieve-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 20px; margin-top: 40px;
+}
+.achieve-card {
+  background: linear-gradient(135deg, rgba(26,58,140,0.22), rgba(201,151,43,0.12));
+  border: 1px solid rgba(201,151,43,0.25);
+  border-radius: 16px; padding: 28px;
+  text-align: center; transition: all 0.3s;
+}
+.achieve-card:hover { background: linear-gradient(135deg, rgba(26,58,140,0.35), rgba(201,151,43,0.2)); transform: translateY(-4px); }
+.achieve-icon { font-size: 2.5rem; margin-bottom: 14px; display: block; }
+.achieve-card h3 { font-size: 0.95rem; font-weight: 700; color: white; margin-bottom: 6px; }
+.achieve-card p { font-size: 0.8rem; color: rgba(255,255,255,0.9); line-height: 1.5; }
+
+/* Back to Top */
+#back-top {
+  position: fixed; bottom: 30px; right: 30px;
+  width: 44px; height: 44px;
+  background: var(--gold);
+  color: var(--navy); border: none; border-radius: 50%;
+  font-size: 1.1rem; cursor: pointer;
+  z-index: 4000; opacity: 0; pointer-events: none;
+  transition: all 0.3s;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 8px 20px rgba(201,151,43,0.4);
+}
+#back-top.visible { opacity: 1; pointer-events: auto; }
+#back-top:hover { transform: translateY(-3px); }
+
+/* Footer */
+footer {
+  background: var(--dark);
+  padding: 60px 0 30px;
+  color: rgba(255,255,255,0.6);
+}
+.footer-grid {
+  display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 50px; margin-bottom: 40px;
+}
+.footer-brand h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem; color: white; margin-bottom: 12px;
+}
+.footer-brand p { font-size: 0.83rem; line-height: 1.7; }
+.footer-links h4 { color: white; font-size: 0.85rem; font-weight: 700; margin-bottom: 16px; }
+.footer-links ul { list-style: none; }
+.footer-links ul li { margin-bottom: 10px; }
+.footer-links ul li a {
+  color: rgba(255,255,255,0.5); text-decoration: none;
+  font-size: 0.82rem; transition: color 0.2s;
+}
+.footer-links ul li a:hover { color: var(--gold); }
+.footer-bottom {
+  border-top: 1px solid rgba(255,255,255,0.08);
+  padding-top: 24px;
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 0.8rem;
+}
+.social-links { display: flex; gap: 12px; }
+.social-link {
+  width: 36px; height: 36px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px; text-decoration: none;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.9rem; transition: all 0.2s;
+}
+.social-link:hover { background: var(--gold); border-color: var(--gold); }
+
+/* Dark Mode */
+body.dark-mode {
+  --cream: #111827;
+  --light: #1f2937;
+  background: #0d1117;
+  color: #e5e7eb;
+}
+body.dark-mode .section-title { color: #c9972b; }
+body.dark-mode #gallery .section-title { color: #c9972b; }
+body.dark-mode #achievements .section-title { color: #c9972b; }
+body.dark-mode .facility-card,
+body.dark-mode .dept-card,
+body.dark-mode .event-card,
+body.dark-mode .contact-form-wrap { background: #1f2937; border-color: rgba(255,255,255,0.06); }
+body.dark-mode .fee-table tbody tr { background: #1a3a8c; }
+body.dark-mode .fee-table tbody tr:nth-child(even) { background: #0d1b3e; }
+body.dark-mode .fee-table td { color: #ffffff; border-color: rgba(255,255,255,0.15); font-weight: 500; }
+body.dark-mode .fee-table td strong { color: #faf8f3; font-weight: 700; }
+body.dark-mode .club-card { background: #1f2937; }
+body.dark-mode .club-card h4 { color: #f0f6ff; }
+body.dark-mode h1,h2,h3,h4 { color: inherit; }
+
+/* Dark-mode contrast fixes */
+body.dark-mode {
+  --text-strong: #e6eef8;
+  --text-normal: #cfe0f6;
+  --muted: #9aa6b2;
+}
+body.dark-mode .section-desc,
+body.dark-mode .about-content p,
+body.dark-mode .dept-card-body p,
+body.dark-mode .facility-card p,
+body.dark-mode .achieve-card p,
+body.dark-mode .contact-info-item p,
+body.dark-mode .stat-card .stat-label,
+body.dark-mode .recruiter-logo,
+body.dark-mode .footer-links ul li a {
+  color: var(--text-normal);
+}
+body.dark-mode .event-body p,
+body.dark-mode .club-card p,
+body.dark-mode #events .section-desc,
+body.dark-mode #studentlife .section-desc,
+body.dark-mode .contact-info-item h4,
+body.dark-mode .contact-form-wrap h3,
+body.dark-mode .form-group label {
+  color: var(--gold);
+}
+body.dark-mode .partner-stat .stat-txt {
+  color: var(--gold);
+}
+body.dark-mode .stat-card .stat-num,
+body.dark-mode .partner-stat .stat-val {
+  color: var(--gold);
+}
+body.dark-mode .btn-outline {
+  color: var(--text-strong);
+  border-color: rgba(255,255,255,0.12);
+}
+body.dark-mode .social-link { background: rgba(255,255,255,0.03); border-color: rgba(255,255,255,0.06); }
+body.dark-mode .logo-fallback { color: var(--text-strong); background: rgba(255,255,255,0.02); }
+
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .hero-content { grid-template-columns: 1fr; }
+  .hero-visual { display: none; }
+  .dept-grid, .facilities-grid { grid-template-columns: repeat(2, 1fr); }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  .achieve-grid, .clubs-grid { grid-template-columns: repeat(2, 1fr); }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 768px) {
+  nav { padding: 0 20px; }
+  .container { padding: 0 20px; }
+  .nav-links, .nav-search { display: none; }
+  .hamburger { display: flex; }
+  .hero-content { padding: 0 20px; }
+  .about-grid, .admissions-grid, .contact-grid { grid-template-columns: 1fr; }
+  .placement-stats-row { grid-template-columns: 1fr; }
+  .events-grid { grid-template-columns: 1fr; }
+  .gallery-grid { grid-template-columns: repeat(2, 1fr); grid-template-rows: auto; }
+  .gallery-item:first-child { grid-column: span 2; grid-row: span 1; height: 200px; }
+  .dept-grid, .facilities-grid, .clubs-grid, .achieve-grid { grid-template-columns: 1fr 1fr; }
+  .footer-grid { grid-template-columns: 1fr; }
+  .hero-meta { gap: 20px; }
+  .form-row { grid-template-columns: 1fr; }
+  .dept-header { flex-direction: column; align-items: flex-start; gap: 16px; }
+  #chatbot-window { width: 300px; right: 16px; }
+  .about-badge-card { display: none; }
+  .about-img-accent { display: none; }
+  .partners-container { flex-direction: column; gap: 30px; }
+  .slideshow-wrapper { max-width: 100%; }
+  .partners-stats { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 480px) {
+  .dept-grid, .facilities-grid, .clubs-grid, .achieve-grid { grid-template-columns: 1fr; }
+  .stats-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+  display: none; /* Hide theme toggle - dark mode only */
+}
+</style>
+</head>
+<body class="dark-mode">
+
+<!-- Custom Cursor -->
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- Loading Screen -->
+<div id="loader">
+  <div class="loader-crest"></div>
+  <div class="loader-text">PDKVCET</div>
+</div>
+
+<!-- Particles Canvas -->
+<canvas id="particles-canvas"></canvas>
+
+<!-- Notification Banner -->
+<div id="notif-banner">
+  🎓 <strong>Admissions Open 2026–27</strong> — B.E / B.Tech / M.E Programs &nbsp;|&nbsp;
+  Counseling Code: <strong>1442</strong> &nbsp;|&nbsp;
+  <a href="#admissions">Apply Now →</a>
+  <button id="close-notif">×</button>
+</div>
+
+<!-- Navbar -->
+<nav id="navbar">
+  <a href="#home" class="nav-brand">
+    <img src="logo.jpg" alt="College Logo" class="nav-logo-circle" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;">
+    <div class="nav-brand-text">
+      <span>Est. 2011 · Chennai</span>
+      <span>Prince Dr. K. Vasudevan CET</span>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#departments">Departments</a></li>
+    <li><a href="#admissions">Admissions</a></li>
+    <li><a href="#placements">Placements</a></li>
+    <li><a href="#events">Events</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="#admissions" class="nav-cta">Apply Now</a></li>
+  </ul>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <div class="nav-search">
+      <span>🔍</span>
+      <input type="text" placeholder="Search..." id="nav-search-input">
+    </div>
+    <button class="theme-btn" id="theme-toggle" style="display:none;">🌙</button>
+    <div class="hamburger" id="hamburger">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobile-menu">
+  <a href="#about" onclick="closeMobile()">About</a>
+  <a href="#departments" onclick="closeMobile()">Departments</a>
+  <a href="#admissions" onclick="closeMobile()">Admissions</a>
+  <a href="#placements" onclick="closeMobile()">Placements</a>
+  <a href="#events" onclick="closeMobile()">Events</a>
+  <a href="#gallery" onclick="closeMobile()">Gallery</a>
+  <a href="#contact" onclick="closeMobile()">Contact</a>
+</div>
+
+<!-- Hero Section -->
+<section id="home">
+  <div class="hero-bg-pattern"></div>
+  <div class="hero-grid-lines"></div>
+  <div class="hero-content">
+    <div class="hero-left">
+      <div class="hero-badge">NAAC Accredited · AICTE Approved</div>
+      <h1 class="hero-title">
+        Shaping Engineers<br>of
+        <span class="gold">Tomorrow</span>
+      </h1>
+      <p class="hero-tagline">
+        Prince Dr. K. Vasudevan College of Engineering & Technology —<br>
+        <span class="typing-wrap" id="typing-text">Where Innovation Meets Excellence</span>
+      </p>
+      <div class="hero-btns">
+        <a href="#admissions" class="btn-primary">🎓 Apply Now 2026–27</a>
+        <a href="#departments" class="btn-outline">📚 Explore Programs</a>
+      </div>
+      <div class="hero-meta">
+        <div class="hero-meta-item">
+          <div class="num">14+</div>
+          <div class="label">Years of Excellence</div>
+        </div>
+        <div class="hero-meta-item">
+          <div class="num">2452</div>
+          <div class="label">Students</div>
+        </div>
+        <div class="hero-meta-item">
+          <div class="num">80%+</div>
+          <div class="label">Placement Rate</div>
+        </div>
+        <div class="hero-meta-item">
+          <div class="num">5</div>
+          <div class="label">Programs</div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-img-frame">
+        <img src="img3.jpg" alt="Campus" loading="eager">
+        <div class="hero-img-overlay"></div>
+      </div>
+      <div class="hero-floating-card hero-fc1">
+        <div class="fc-icon fc-blue">🏆</div>
+        <div class="fc-text">
+          <div class="main">NAAC Accredited</div>
+          <div class="sub">Quality Excellence</div>
+        </div>
+      </div>
+      <div class="hero-floating-card hero-fc2">
+        <div class="fc-icon fc-green">💼</div>
+        <div class="fc-text">
+          <div class="main">80.28% Placement</div>
+          <div class="sub">Top Recruiters</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-indicator">SCROLL</div>
+</section>
+
+<!-- Stats -->
+<section id="stats">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon">👨‍🎓</div>
+        <div class="stat-num"><span class="counter" data-target="2452">0</span></div>
+        <div class="stat-label">Total Students Enrolled</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">📋</div>
+        <div class="stat-num"><span class="counter" data-target="5">0</span></div>
+        <div class="stat-label">Programs Offered</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🏛</div>
+        <div class="stat-num"><span class="counter" data-target="14">0</span><span class="stat-suf">+</span></div>
+        <div class="stat-label">Years of Excellence</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">💼</div>
+        <div class="stat-num"><span class="counter" data-target="80">0</span><span class="stat-suf">%</span></div>
+        <div class="stat-label">Placement Rate</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- About -->
+<section id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-image-stack">
+        <img src="img1.jpg" alt="College" class="about-img-main">
+        <img src="img4.jpg" alt="Labs" class="about-img-accent">
+        <div class="about-badge-card">
+          <div class="yrs">14+</div>
+          <div class="yrs-label">Years of<br>Excellence</div>
+        </div>
+      </div>
+      <div class="about-content">
+        <div class="section-label">About Us</div>
+        <h2 class="section-title">Nurturing Excellence in Engineering Since 2011</h2>
+        <p class="section-desc">
+          Prince Dr. K. Vasudevan College of Engineering and Technology is located at Ponmar, Chennai — an AICTE-approved, NAAC-accredited institution dedicated to producing globally competitive engineers with strong technical and ethical foundations.
+        </p>
+        <div class="accreditation-row">
+          <div class="accred-chip">✓ NAAC Accredited</div>
+          <div class="accred-chip">✓ AICTE Approved</div>
+          <div class="accred-chip">✓ Anna University Affiliated</div>
+          <div class="accred-chip">✓ NIRF Ranked</div>
+          <div class="accred-chip">✓ Code: 1442</div>
+        </div>
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="year">2011</div>
+            <div class="event">College founded under Prince Group of Institutions</div>
+          </div>
+          <div class="timeline-item">
+            <div class="year">2015</div>
+            <div class="event">First batch of engineers graduated successfully</div>
+          </div>
+          <div class="timeline-item">
+            <div class="year">2019</div>
+            <div class="event">NAAC Accreditation achieved; expanded to PG programs</div>
+          </div>
+          <div class="timeline-item">
+            <div class="year">2024</div>
+            <div class="event">Launched AI & Data Science and Cyber Security branches</div>
+          </div>
+          <div class="timeline-item">
+            <div class="year">2026</div>
+            <div class="event">Admissions open — new research labs inaugurated</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Departments -->
+<section id="departments">
+  <div class="container">
+    <div class="dept-header">
+      <div>
+        <div class="section-label">Academic Programs</div>
+        <h2 class="section-title">Our Departments</h2>
+        <p class="section-desc" style="margin-top: 12px; color: white;">Explore our flagship engineering programs and specializations designed for future-ready careers.</p>
+      </div>
+      <div class="dept-filter">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="ug">UG</button>
+        <button class="filter-btn" data-filter="pg">PG</button>
+        <button class="filter-btn" data-filter="cs">CS & IT</button>
+      </div>
+    </div>
+    <div class="dept-grid" id="dept-grid">
+      <div class="dept-card" data-cat="ug cs">
+        <div class="dept-card-banner" style="background:linear-gradient(135deg,#eff6ff,#dbeafe)">💻</div>
+        <div class="dept-card-body">
+          <h3>B.E. Computer Science & Engineering</h3>
+          <p>Core computing principles — algorithms, OS, databases, networks — preparing students for software and systems roles.</p>
+          <div class="dept-meta">
+            <span class="dept-tag">4 Years</span>
+            <span class="dept-tag">60 Seats</span>
+            <span class="dept-tag">UG</span>
+          </div>
+        </div>
+      </div>
+      <div class="dept-card" data-cat="ug cs">
+        <div class="dept-card-banner" style="background:linear-gradient(135deg,#fef3c7,#fde68a)">🔐</div>
+        <div class="dept-card-body">
+          <h3>B.E. CSE (Cyber Security)</h3>
+          <p>Specialised track in network security, ethical hacking, cryptography and digital forensics.</p>
+          <div class="dept-meta">
+            <span class="dept-tag">4 Years</span>
+            <span class="dept-tag">60 Seats</span>
+            <span class="dept-tag">UG</span>
+          </div>
+        </div>
+      </div>
+      <div class="dept-card" data-cat="ug">
+        <div class="dept-card-banner" style="background:linear-gradient(135deg,#f0fdf4,#dcfce7)">🧬</div>
+        <div class="dept-card-body">
+          <h3>B.E. Biomedical Engineering</h3>
+          <p>Intersection of medical science and engineering — medical devices, imaging systems, bioinstrumentation.</p>
+          <div class="dept-meta">
+            <span class="dept-tag">4 Years</span>
+            <span class="dept-tag">60 Seats</span>
+            <span class="dept-tag">UG</span>
+          </div>
+        </div>
+      </div>
+      <div class="dept-card" data-cat="ug cs">
+        <div class="dept-card-banner" style="background:linear-gradient(135deg,#faf5ff,#ede9fe)">🤖</div>
+        <div class="dept-card-body">
+          <h3>B.Tech. AI & Data Sciences</h3>
+          <p>Machine learning, deep learning, data analytics, and AI applications — the most in-demand engineering program.</p>
+          <div class="dept-meta">
+            <span class="dept-tag">4 Years</span>
+            <span class="dept-tag">60 Seats</span>
+            <span class="dept-tag">UG</span>
+          </div>
+        </div>
+      </div>
+      <div class="dept-card" data-cat="ug">
+        <div class="dept-card-banner" style="background:linear-gradient(135deg,#fff7ed,#fed7aa)">📖</div>
+        <div class="dept-card-body">
+          <h3>Humanities & Social Sciences</h3>
+          <p>Supporting department providing English, Mathematics, Physics and Chemistry for all engineering programs.</p>
+          <div class="dept-meta">
+            <span class="dept-tag">Core Dept.</span>
+            <span class="dept-tag">UG Support</span>
+          </div>
+        </div>
+      </div>
+      <div class="dept-card" data-cat="pg cs">
+        <div class="dept-card-banner" style="background:linear-gradient(135deg,#fff1f2,#ffe4e6)">🎓</div>
+        <div class="dept-card-body">
+          <h3>M.E. Computer Science & Engineering</h3>
+          <p>Advanced research-oriented postgraduate program in algorithms, distributed systems, and emerging technologies.</p>
+          <div class="dept-meta">
+            <span class="dept-tag">2 Years</span>
+            <span class="dept-tag">18 Seats</span>
+            <span class="dept-tag">PG</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Admissions -->
+<section id="admissions">
+  <div class="container">
+    <div class="section-label">Join Us</div>
+    <h2 class="section-title">Admissions 2026–27</h2>
+    <p class="section-desc" style="margin-bottom:50px">Applications are open for B.E., B.Tech, and M.E. programs. Explore fee structures and begin your application today.</p>
+    <div class="admissions-grid">
+      <div>
+        <h3 style="font-size:1rem;font-weight:700;color:white;margin-bottom:20px;">Fee Structure <span style="color:var(--cream);font-weight:400;font-size:0.82rem;">(Click headers to sort)</span></h3>
+        <div class="fee-table-wrap">
+          <table class="fee-table" id="fee-table">
+            <thead>
+              <tr>
+                <th onclick="sortTable(0)">Program <span class="sort-icon">↕</span></th>
+                <th onclick="sortTable(1)">Duration <span class="sort-icon">↕</span></th>
+                <th onclick="sortTable(2)">Annual Fee <span class="sort-icon">↕</span></th>
+                <th onclick="sortTable(3)">Seats <span class="sort-icon">↕</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>B.E. CSE</strong></td><td>4 Years</td><td>₹85,000</td><td><span class="seats-badge">60</span></td></tr>
+              <tr><td><strong>B.E. CSE (Cyber Security)</strong></td><td>4 Years</td><td>₹90,000</td><td><span class="seats-badge">60</span></td></tr>
+              <tr><td><strong>B.E. Biomedical Engg.</strong></td><td>4 Years</td><td>₹80,000</td><td><span class="seats-badge">60</span></td></tr>
+              <tr><td><strong>B.Tech. AI & Data Sciences</strong></td><td>4 Years</td><td>₹95,000</td><td><span class="seats-badge">60</span></td></tr>
+              <tr><td><strong>M.E. CSE</strong></td><td>2 Years</td><td>₹70,000</td><td><span class="seats-badge">18</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <br>
+        <button class="btn-primary" onclick="document.getElementById('apply-modal').classList.add('open')">
+          📋 Apply Now — Open Form
+        </button>
+      </div>
+      <div class="admission-steps">
+        <h3 style="font-size:1rem;font-weight:700;color:white;margin-bottom:20px;">Admission Process</h3>
+        <div class="step-item">
+          <div class="step-num">1</div>
+          <div class="step-text"><h4>Check Eligibility</h4><p>10+2 with Physics, Chemistry, Math (PCM) with min. 45% aggregate. Tamil Nadu State Board / CBSE / ISC accepted.</p></div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">2</div>
+          <div class="step-text"><h4>Register on TNEA Portal</h4><p>Apply via Tamil Nadu Engineering Admissions (TNEA) portal or direct Management Quota application.</p></div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">3</div>
+          <div class="step-text"><h4>Document Verification</h4><p>Submit academic certificates, community certificate, Transfer Certificate, and Nativity Certificate.</p></div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">4</div>
+          <div class="step-text"><h4>Counseling & Allotment</h4><p>Attend TNEA counseling. Enter Counseling Code <strong>1442</strong> to choose PDKVCET as your preference.</p></div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">5</div>
+          <div class="step-text"><h4>Fee Payment & Enrollment</h4><p>Pay the semester fee and complete enrollment formalities at the college campus.</p></div>
+        </div>
+        <div style="margin-top:24px;padding:16px 20px;background:rgba(201,151,43,0.1);border-radius:12px;border-left:4px solid var(--gold);">
+          <strong style="font-size:0.85rem;color:var(--gold);">Management Quota Contact:</strong><br>
+          <span style="font-size:0.82rem;color:var(--gold);">044-2499 1414 &nbsp;|&nbsp; 9840100400 &nbsp;|&nbsp; 9047040413</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Placements -->
+<section id="placements">
+  <div class="container">
+    <div class="section-label">Career Outcomes</div>
+    <h2 class="section-title">Placement Excellence</h2>
+    <div class="placement-stats-row" style="margin-top:40px;">
+      <div class="placement-stat-card ps-blue">
+        <div class="ps-num">80.28%</div>
+        <div class="ps-label">Overall Placement Rate</div>
+      </div>
+      <div class="placement-stat-card ps-green">
+        <div class="ps-num">₹8.5 LPA</div>
+        <div class="ps-label">Highest Package</div>
+      </div>
+      <div class="placement-stat-card ps-purple">
+        <div class="ps-num">₹4.2 LPA</div>
+        <div class="ps-label">Average Package</div>
+      </div>
+    </div>
+    <div class="recruiters-title">Our Top Recruiters</div>
+    <div class="recruiter-logos">
+      <div class="recruiter-logo">TCS</div>
+      <div class="recruiter-logo">Infosys</div>
+      <div class="recruiter-logo">Wipro</div>
+      <div class="recruiter-logo">HCL Technologies</div>
+      <div class="recruiter-logo">Cognizant</div>
+      <div class="recruiter-logo">Tech Mahindra</div>
+      <div class="recruiter-logo">Capgemini</div>
+      <div class="recruiter-logo">L&T Infotech</div>
+      <div class="recruiter-logo">Zoho Corp</div>
+      <div class="recruiter-logo">NTT Data</div>
+    </div>
+  </div>
+</section>
+
+<!-- Company Partners Slideshow -->
+<section id="partners">
+  <div class="container">
+    <div class="section-label">Our Network</div>
+    <h2 class="section-title">Company Partners & Recruiters</h2>
+    <p class="section-desc" style="margin-bottom:40px;">Top-tier companies that recruit our graduates and partner with PDKVCET for internships and projects.</p>
+    <div class="partners-container">
+      <div class="slideshow-wrapper">
+        <div class="logo-carousel">
+          <button class="carousel-arrow prev" onclick="prevLogo()">‹</button>
+          <div class="logo-slide active" data-index="0">
+            <img src="5.png" alt="TCS Logo">
+          </div>
+          <div class="logo-slide" data-index="1">
+            <img src="10.jpg" alt="Infosys Logo">
+          </div>
+          <div class="logo-slide" data-index="2">
+            <img src="8.png" alt="Wipro Logo">
+          </div>
+          <div class="logo-slide" data-index="3">
+            <img src="7.png" alt="HCLTech Logo">
+          </div>
+          <div class="logo-slide" data-index="4">
+            <img src="2.jpg" alt="Cognizant Logo">
+          </div>
+          <div class="logo-slide" data-index="5">
+            <img src="4.png" alt="Tech Mahindra Logo">
+          </div>
+          <div class="logo-slide" data-index="6">
+            <img src="0.png" alt="Capgemini Logo">
+          </div>
+          <div class="logo-slide" data-index="7">
+            <img src="00.png" alt="L&T Infotech Logo">
+          </div>
+          <div class="logo-slide" data-index="8">
+            <img src="22.jpg" alt="Zoho Logo">
+          </div>
+          <div class="logo-slide" data-index="9">
+            <img src="77.png" alt="NTT Data Logo">
+          </div>
+          <button class="carousel-arrow next" onclick="nextLogo()">›</button>
+        </div>
+        <div class="carousel-nav">
+          <div class="carousel-dot active" onclick="goToLogo(0)" data-index="0"></div>
+          <div class="carousel-dot" onclick="goToLogo(1)" data-index="1"></div>
+          <div class="carousel-dot" onclick="goToLogo(2)" data-index="2"></div>
+          <div class="carousel-dot" onclick="goToLogo(3)" data-index="3"></div>
+          <div class="carousel-dot" onclick="goToLogo(4)" data-index="4"></div>
+          <div class="carousel-dot" onclick="goToLogo(5)" data-index="5"></div>
+          <div class="carousel-dot" onclick="goToLogo(6)" data-index="6"></div>
+          <div class="carousel-dot" onclick="goToLogo(7)" data-index="7"></div>
+          <div class="carousel-dot" onclick="goToLogo(8)" data-index="8"></div>
+          <div class="carousel-dot" onclick="goToLogo(9)" data-index="9"></div>
+        </div>
+      </div>
+      <div class="partners-stats">
+        <div class="partner-stat">
+          <div class="stat-val">250+</div>
+          <div class="stat-txt">Companies Visit Campus</div>
+        </div>
+        <div class="partner-stat">
+          <div class="stat-val">80%+</div>
+          <div class="stat-txt">Placement Success Rate</div>
+        </div>
+        <div class="partner-stat">
+          <div class="stat-val">₹8.5 LPA</div>
+          <div class="stat-txt">Highest Package</div>
+        </div>
+        <div class="partner-stat">
+          <div class="stat-val">₹4.2 LPA</div>
+          <div class="stat-txt">Average Package</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Facilities -->
+<section id="facilities">
+  <div class="container">
+    <div class="section-label">Campus Life</div>
+    <h2 class="section-title">World-Class Facilities</h2>
+    <p class="section-desc" style="margin-bottom:50px;">A fully-equipped campus designed to foster learning, creativity, and well-being.</p>
+    <div class="facilities-grid">
+      <div class="facility-card">
+        <span class="facility-icon">📚</span>
+        <h3>Central Library</h3>
+        <p>Over 35,000 volumes, digital e-library access, DELNET membership, and dedicated reading halls open 7 days a week.</p>
+      </div>
+      <div class="facility-card">
+        <span class="facility-icon">🔬</span>
+        <h3>Advanced Labs</h3>
+        <p>State-of-the-art computing labs, AI/ML workstations, biomedical simulation labs, and dedicated research facilities.</p>
+      </div>
+      <div class="facility-card">
+        <span class="facility-icon">🏀</span>
+        <h3>Sports Complex</h3>
+        <p>Cricket ground, basketball court, volleyball, badminton, and indoor games facilities with certified sports coaches.</p>
+      </div>
+      <div class="facility-card">
+        <span class="facility-icon">🏠</span>
+        <h3>Hostel</h3>
+        <p>Separate boys' and girls' hostels with 24/7 security, mess facility, Wi-Fi, and comfortable study rooms.</p>
+      </div>
+      <div class="facility-card">
+        <span class="facility-icon">🍽</span>
+        <h3>Cafeteria & Canteen</h3>
+        <p>Hygienic, well-maintained cafeteria serving nutritious multi-cuisine meals at subsidised rates throughout the day.</p>
+      </div>
+      <div class="facility-card">
+        <span class="facility-icon">📡</span>
+        <h3>High-Speed Wi-Fi</h3>
+        <p>Campus-wide gigabit Wi-Fi connectivity with dedicated bandwidth for academics, research, and digital learning resources.</p>
+      </div>
+      <div class="facility-card">
+        <span class="facility-icon">🚌</span>
+        <h3>Transport</h3>
+        <p>Fleet of college buses covering Chennai, Tambaram, OMR, ECR and surrounding areas with GPS-tracked routes.</p>
+      </div>
+      <div class="facility-card">
+        <span class="facility-icon">🖥</span>
+        <h3>Smart Classrooms</h3>
+        <p>100% smart classrooms with interactive boards, projectors, and e-content delivery for immersive learning experiences.</p>
+      </div>
+      <div class="facility-card">
+        <span class="facility-icon">💡</span>
+        <h3>Innovation Cell</h3>
+        <p>Entrepreneurship incubation hub supporting student startups with mentorship, prototyping tools, and seed funding support.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Events -->
+<section id="events">
+  <div class="container">
+    <div class="section-label">Campus Activities</div>
+    <h2 class="section-title">Upcoming Events</h2>
+    <p class="section-desc" style="margin-bottom:40px;">Stay connected with the pulse of campus life — hackathons, conferences, cultural fests and more.</p>
+    <div class="events-grid">
+      <div class="event-card">
+        <div class="event-date-banner">
+          <div>
+            <div class="event-date">21</div>
+            <div class="event-month">February 2026</div>
+          </div>
+          <div class="event-type-tag">Hackathon</div>
+        </div>
+        <div class="event-body">
+          <h3>PROTO THON '26 — 12-Hour Innovation Hackathon</h3>
+          <p>Build innovative solutions in 12 hours. Open to all engineering students across Tamil Nadu. Prizes worth ₹1,00,000.</p>
+        </div>
+      </div>
+      <div class="event-card">
+        <div class="event-date-banner">
+          <div>
+            <div class="event-date">15</div>
+            <div class="event-month">March 2026</div>
+          </div>
+          <div class="event-type-tag">Conference</div>
+        </div>
+        <div class="event-body">
+          <h3>16th ICSIE 2026 — International Conference on Science & Innovative Engineering</h3>
+          <p>Hybrid international conference bringing together researchers from around the globe. Paper submissions welcome.</p>
+        </div>
+      </div>
+      <div class="event-card">
+        <div class="event-date-banner">
+          <div>
+            <div class="event-date">10</div>
+            <div class="event-month">April 2026</div>
+          </div>
+          <div class="event-type-tag">Cultural Fest</div>
+        </div>
+        <div class="event-body">
+          <h3>PRINCE FEST '26 — Annual Cultural & Technical Extravaganza</h3>
+          <p>Two days of technical events, cultural performances, workshops, and career fairs. 3000+ participants expected.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Achievements -->
+<section id="achievements">
+  <div class="container">
+    <div class="section-label" style="color:var(--gold)">Recognition</div>
+    <h2 class="section-title">Our Achievements</h2>
+    <div class="achieve-grid">
+      <div class="achieve-card">
+        <span class="achieve-icon">🏆</span>
+        <h3>NAAC Accreditation</h3>
+        <p>Accredited by National Assessment and Accreditation Council for quality education standards.</p>
+      </div>
+      <div class="achieve-card">
+        <span class="achieve-icon">📊</span>
+        <h3>NIRF Ranking</h3>
+        <p>Featured in National Institutional Ranking Framework — Ministry of Education, Govt. of India.</p>
+      </div>
+      <div class="achieve-card">
+        <span class="achieve-icon">🌟</span>
+        <h3>ARIIA Ranked</h3>
+        <p>Atal Ranking of Institutions on Innovation Achievements — recognised for innovation ecosystem.</p>
+      </div>
+      <div class="achieve-card">
+        <span class="achieve-icon">🔬</span>
+        <h3>Research Publications</h3>
+        <p>Faculty and students published 200+ research papers in national and international journals.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Gallery -->
+<section id="gallery">
+  <div class="container">
+    <div class="section-label" style="color:var(--gold)">Campus Life</div>
+    <h2 class="section-title">Photo Gallery</h2>
+    <div class="gallery-grid">
+      <div class="gallery-item" onclick="openLightbox('img1.jpg')">
+        <img src="img1.jpg" alt="Campus">
+        <div class="gallery-overlay"><span>🔍</span></div>
+      </div>
+      <div class="gallery-item" onclick="openLightbox('img3.jpg')">
+        <img src="img3.jpg" alt="Building">
+        <div class="gallery-overlay"><span>🔍</span></div>
+      </div>
+      <div class="gallery-item" onclick="openLightbox('img4.jpg')">
+        <img src="img4.jpg" alt="Library">
+        <div class="gallery-overlay"><span>🔍</span></div>
+      </div>
+      <div class="gallery-item" onclick="openLightbox('img6.jpg')">
+        <img src="img6.jpg" alt="Students">
+        <div class="gallery-overlay"><span>🔍</span></div>
+      </div>
+      <div class="gallery-item" onclick="openLightbox('img8.jpg')">
+        <img src="img8.jpg" alt="Lab">
+        <div class="gallery-overlay"><span>🔍</span></div>
+      </div>
+      <div class="gallery-item" onclick="openLightbox('img9.jpg')">
+        <img src="img9.jpg" alt="Graduation">
+        <div class="gallery-overlay"><span>🔍</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Student Life -->
+<section id="studentlife">
+  <div class="container">
+    <div class="section-label">Beyond Academics</div>
+    <h2 class="section-title">Student Life & Clubs</h2>
+    <p class="section-desc" style="margin-bottom:40px;">Holistic development through clubs, committees, and social initiatives.</p>
+    <div class="clubs-grid">
+      <div class="club-card">
+        <span class="club-icon">🌐</span>
+        <h4>NSS Unit</h4>
+        <p>National Service Scheme — community outreach and social development activities.</p>
+      </div>
+      <div class="club-card">
+        <span class="club-icon">🎭</span>
+        <h4>Cultural Club</h4>
+        <p>Dance, drama, music and literary activities fostering creative expression.</p>
+      </div>
+      <div class="club-card">
+        <span class="club-icon">💻</span>
+        <h4>Coding Club</h4>
+        <p>Competitive programming, hackathons, open-source contributions and tech workshops.</p>
+      </div>
+      <div class="club-card">
+        <span class="club-icon">⚽</span>
+        <h4>Sports Club</h4>
+        <p>Representing the college in inter-collegiate and state-level sports tournaments.</p>
+      </div>
+      <div class="club-card">
+        <span class="club-icon">🔴</span>
+        <h4>Red Ribbon Club</h4>
+        <p>Youth-led awareness campaigns on health, HIV prevention and blood donation.</p>
+      </div>
+      <div class="club-card">
+        <span class="club-icon">♻️</span>
+        <h4>Green Campus Club</h4>
+        <p>Sustainability initiatives, tree planting drives, plastic-free campus campaigns.</p>
+      </div>
+      <div class="club-card">
+        <span class="club-icon">👩</span>
+        <h4>Women's Cell (DWC)</h4>
+        <p>Empowering women students through mentoring, leadership and awareness programs.</p>
+      </div>
+      <div class="club-card">
+        <span class="club-icon">🛡</span>
+        <h4>Anti-Ragging Cell (ARC)</h4>
+        <p>Ensuring a safe, harassment-free campus environment for all students.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact -->
+<section id="contact">
+  <div class="container">
+    <div class="section-label">Get In Touch</div>
+    <h2 class="section-title">Contact Us</h2>
+    <div class="contact-grid" style="margin-top:40px;">
+      <div>
+        <div class="contact-info-item">
+          <div class="contact-icon">📍</div>
+          <div>
+            <h4>Campus Address</h4>
+            <p>Medavakkam - Mambakkam Road,<br>Ponmar, Chennai – 600 127.<br>Tamil Nadu, India.</p>
+          </div>
+        </div>
+        <div class="contact-info-item">
+          <div class="contact-icon">📞</div>
+          <div>
+            <h4>Phone Numbers</h4>
+            <a href="tel:04424991414">044-2499 1414</a><br>
+            <a href="tel:9840100400">9840100400</a> &nbsp;|&nbsp; <a href="tel:9047040413">9047040413</a>
+          </div>
+        </div>
+        <div class="contact-info-item">
+          <div class="contact-icon">✉️</div>
+          <div>
+            <h4>Email</h4>
+            <a href="mailto:prince@princedrkvasudevan.com">prince@princedrkvasudevan.com</a>
+          </div>
+        </div>
+        <div class="contact-info-item">
+          <div class="contact-icon">🏢</div>
+          <div>
+            <h4>Head Office</h4>
+            <p>Prince Matriculation Higher Secondary School,<br>7, Kannagi Street, Madipakkam–Puzhuthivakkam,<br>Chennai – 600 091.</p>
+          </div>
+        </div>
+        <div class="map-placeholder">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3888.0!2d80.178!3d12.938!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTLCsDU2JzE2LjgiTiA4MMKwMTAnNDAuOCJF!5e0!3m2!1sen!2sin!4v1"
+            width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy">
+          </iframe>
+        </div>
+      </div>
+      <div class="contact-form-wrap">
+        <h3>Send Us a Message</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" id="cf-name" placeholder="Your full name">
+            <div class="form-error" id="err-name">Please enter your name.</div>
+          </div>
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" id="cf-email" placeholder="your@email.com">
+            <div class="form-error" id="err-email">Please enter a valid email.</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="tel" id="cf-phone" placeholder="+91 98765 43210">
+        </div>
+        <div class="form-group">
+          <label>Subject</label>
+          <input type="text" id="cf-subject" placeholder="Admission enquiry, etc.">
+          <div class="form-error" id="err-subject">Please enter a subject.</div>
+        </div>
+        <div class="form-group">
+          <label>Message</label>
+          <textarea id="cf-message" rows="5" placeholder="Your message here..."></textarea>
+          <div class="form-error" id="err-message">Please write your message.</div>
+        </div>
+        <button class="btn-primary" style="width:100%" onclick="submitContactForm()">
+          Send Message →
+        </button>
+        <div id="form-success" style="display:none;margin-top:16px;padding:14px;background:#f0fdf4;border-radius:10px;color:#065f46;font-size:0.85rem;font-weight:600;">
+          ✅ Thank you! We'll get back to you within 24 hours.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <h3>Prince Dr. K. Vasudevan CET</h3>
+        <p>NAAC Accredited · AICTE Approved · Anna University Affiliated.<br>
+        Shaping engineers since 2011 at Ponmar, Chennai.<br>
+        Counseling Code: <strong style="color:var(--gold)">1442</strong></p>
+        <div class="social-links" style="margin-top:20px;">
+          <a class="social-link" href="https://www.facebook.com/p/Prince-Dr-K-Vasudevan-College-of-Engineering-and-Technology-100063760309435/" target="_blank" title="Facebook">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14.5 9H16.5V5.5H14.5C12.29 5.5 11 6.79 11 9V10.5H9V14H11V22H14.5V14H17L17.43 10.5H14.5V9Z" fill="currentColor"/></svg>
+          </a>
+          <a class="social-link" href="https://www.youtube.com/@princegroupofinstitutions3527" target="_blank" title="YouTube">
+            <svg width="20" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M23 7.5C23 6.12 22.02 5.14 20.64 5.14H3.36C1.98 5.14 1 6.12 1 7.5V16.5C1 17.88 1.98 18.86 3.36 18.86H20.64C22.02 18.86 23 17.88 23 16.5V7.5ZM9 15.5V8.5L16.5 12L9 15.5Z" fill="currentColor"/></svg>
+          </a>
+          <a class="social-link" href="https://in.linkedin.com/company/prince-dr-k-vasudevan-college-of-engineering-and-technology" target="_blank" title="LinkedIn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4.98 3.5C4.98 4.88 3.95 5.9 2.57 5.9C1.19 5.9 0.16 4.88 0.16 3.5C0.16 2.11 1.19 1.09 2.57 1.09C3.95 1.09 4.98 2.11 4.98 3.5ZM0.34 22H4.78V7.98H0.34V22ZM8.64 7.98H13.1V10.04H13.14C13.84 8.95 15.3 7.82 17.46 7.82C22.1 7.82 23 10.9 23 15.12V22H18.56V15.98C18.56 13.98 18.52 11.56 15.88 11.56C13.2 11.56 12.74 13.64 12.74 15.82V22H8.3V7.98H8.64Z" fill="currentColor"/></svg>
+          </a>
+          <a class="social-link" href="https://www.instagram.com/pdkvcet?igsh=MTN5ZXM5MmhkNWU0eQ==" target="_blank" title="Instagram">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7.75 2H16.25C19.1 2 21.5 4.4 21.5 7.25V16.75C21.5 19.6 19.1 22 16.25 22H7.75C4.9 22 2.5 19.6 2.5 16.75V7.25C2.5 4.4 4.9 2 7.75 2ZM12 7.4C9.35 7.4 7.2 9.55 7.2 12.2C7.2 14.85 9.35 17 12 17C14.65 17 16.8 14.85 16.8 12.2C16.8 9.55 14.65 7.4 12 7.4ZM18.46 6.13C18.46 5.51 18.01 5.06 17.39 5.06C16.77 5.06 16.32 5.51 16.32 6.13C16.32 6.75 16.77 7.2 17.39 7.2C18.01 7.2 18.46 6.75 18.46 6.13Z" fill="currentColor"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="footer-links">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="#about">About Us</a></li>
+          <li><a href="#departments">Departments</a></li>
+          <li><a href="#admissions">Admissions</a></li>
+          <li><a href="#placements">Placements</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h4>Academics</h4>
+        <ul>
+          <li><a href="https://www.princedrkvasudevan.com/departments/department.html" target="_blank">All Departments</a></li>
+          <li><a href="https://www.princedrkvasudevan.com/admissions/B.Tech. Admissions.html" target="_blank">B.E / B.Tech</a></li>
+          <li><a href="https://www.princedrkvasudevan.com/admissions/M.E Admissions.html" target="_blank">M.E Admissions</a></li>
+          <li><a href="https://www.princedrkvasudevan.com/Feedback.html" target="_blank">Student Feedback</a></li>
+          <li><a href="https://www.princedrkvasudevan.com/iqac.html" target="_blank">IQAC</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h4>Accreditations</h4>
+        <ul>
+          <li><a href="https://www.princedrkvasudevan.com/Naac/index.html" target="_blank">NAAC</a></li>
+          <li><a href="https://www.princedrkvasudevan.com/AICTE/NIRF.pdf" target="_blank">NIRF 2025–26</a></li>
+          <li><a href="https://www.princedrkvasudevan.com/ARIIA%202021%20Report_pdkv.pdf" target="_blank">ARIIA</a></li>
+          <li><a href="https://www.princedrkvasudevan.com/nisp/nisp.html" target="_blank">NISP</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Prince Dr. K. Vasudevan College of Engineering & Technology. All rights reserved.</span>
+      <span style="color:var(--gold);">Counseling Code: 1442</span>
+    </div>
+  </div>
+</footer>
+
+<!-- Apply Modal -->
+<div class="modal-overlay" id="apply-modal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="document.getElementById('apply-modal').classList.remove('open')">×</button>
+    <h2>Apply Now — 2026–27</h2>
+    <div class="form-group">
+      <label>Full Name</label>
+      <input type="text" id="m-name" placeholder="Your full name">
+      <div class="form-error" id="m-err-name">Please enter your name.</div>
+    </div>
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" id="m-email" placeholder="your@email.com">
+      <div class="form-error" id="m-err-email">Please enter a valid email.</div>
+    </div>
+    <div class="form-group">
+      <label>Mobile Number</label>
+      <input type="tel" id="m-phone" placeholder="+91 XXXXX XXXXX">
+    </div>
+    <div class="form-group">
+      <label>Program of Interest</label>
+      <select id="m-program">
+        <option value="">Select Program</option>
+        <option>B.E. Computer Science & Engineering</option>
+        <option>B.E. CSE (Cyber Security)</option>
+        <option>B.E. Biomedical Engineering</option>
+        <option>B.Tech. AI & Data Sciences</option>
+        <option>M.E. Computer Science & Engineering</option>
+      </select>
+      <div class="form-error" id="m-err-program">Please select a program.</div>
+    </div>
+    <div class="form-group">
+      <label>10+2 Percentage / GPA</label>
+      <input type="text" id="m-marks" placeholder="e.g. 85%">
+    </div>
+    <button class="btn-primary" style="width:100%" onclick="submitApplication()">Submit Application →</button>
+    <div id="m-success" style="display:none;margin-top:16px;padding:14px;background:#f0fdf4;border-radius:10px;color:#065f46;font-size:0.85rem;font-weight:600;">
+      ✅ Application submitted! Our team will contact you within 48 hours.
+    </div>
+  </div>
+</div>
+
+<!-- Lightbox -->
+<div id="lightbox" onclick="closeLightbox(event)">
+  <button id="lightbox-close" onclick="closeLightbox()">×</button>
+  <img id="lightbox-img" src="" alt="Gallery Image">
+</div>
+
+<!-- Back to Top -->
+<button id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<!-- AI Chatbot -->
+<button id="chatbot-btn" onclick="toggleChat()" title="AI Admission Assistant">🤖</button>
+<div id="chatbot-window">
+  <div class="chat-header">
+    <div class="chat-avatar">🤖</div>
+    <div>
+      <div class="chat-title">AI Admission Assistant</div>
+      <div class="chat-subtitle">PDKVCET · Typically replies instantly</div>
+    </div>
+    <button id="close-chat" onclick="toggleChat()">×</button>
+  </div>
+  <div id="chat-messages">
+    <div class="chat-msg bot">👋 Hi! I'm your PDKVCET admission assistant. Ask me about programs, fees, eligibility, or campus life!</div>
+  </div>
+  <div class="chat-input-row">
+    <input type="text" id="chat-input" placeholder="Type your question..." onkeypress="if(event.key==='Enter')sendChat()">
+    <button id="chat-send" onclick="sendChat()">→</button>
+  </div>
+</div>
+
+<script>
+// Loading
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('loader').classList.add('hidden');
+  }, 1400);
+});
+
+// Cursor
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursor-ring');
+document.addEventListener('mousemove', e => {
+  cursor.style.transform = `translate(${e.clientX - 6}px, ${e.clientY - 6}px)`;
+  ring.style.transform = `translate(${e.clientX - 18}px, ${e.clientY - 18}px)`;
+});
+document.querySelectorAll('a,button').forEach(el => {
+  el.addEventListener('mouseenter', () => { cursor.style.transform += ' scale(2)'; });
+  el.addEventListener('mouseleave', () => {});
+});
+
+// Particles
+const canvas = document.getElementById('particles-canvas');
+const ctx = canvas.getContext('2d');
+let particles = [];
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+class Particle {
+  constructor() { this.reset(); }
+  reset() {
+    this.x = Math.random() * canvas.width;
+    this.y = Math.random() * canvas.height;
+    this.vx = (Math.random() - 0.5) * 0.3;
+    this.vy = (Math.random() - 0.5) * 0.3;
+    this.r = Math.random() * 1.5 + 0.5;
+    this.alpha = Math.random() * 0.3 + 0.1;
+  }
+  update() {
+    this.x += this.vx; this.y += this.vy;
+    if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) this.reset();
+  }
+  draw() {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(201,151,43,${this.alpha})`;
+    ctx.fill();
+  }
+}
+for (let i = 0; i < 80; i++) particles.push(new Particle());
+function animateParticles() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  particles.forEach(p => { p.update(); p.draw(); });
+  // Draw connections
+  for (let i = 0; i < particles.length; i++) {
+    for (let j = i + 1; j < particles.length; j++) {
+      const dx = particles[i].x - particles[j].x;
+      const dy = particles[i].y - particles[j].y;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+      if (dist < 120) {
+        ctx.beginPath();
+        ctx.moveTo(particles[i].x, particles[i].y);
+        ctx.lineTo(particles[j].x, particles[j].y);
+        ctx.strokeStyle = `rgba(201,151,43,${0.06 * (1 - dist/120)})`;
+        ctx.lineWidth = 0.5;
+        ctx.stroke();
+      }
+    }
+  }
+  requestAnimationFrame(animateParticles);
+}
+animateParticles();
+
+// Navbar scroll
+window.addEventListener('scroll', () => {
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+  document.getElementById('back-top').classList.toggle('visible', window.scrollY > 400);
+});
+
+// Notification close
+document.getElementById('close-notif').onclick = () => {
+  document.getElementById('notif-banner').style.display = 'none';
+};
+
+// Mobile menu
+function closeMobile() { document.getElementById('mobile-menu').classList.remove('open'); }
+document.getElementById('hamburger').onclick = () => {
+  document.getElementById('mobile-menu').classList.toggle('open');
+};
+
+// Dark mode - disabled (dark mode only)
+const themeBtn = document.getElementById('theme-toggle');
+// Theme toggle disabled - dark mode only
+if (themeBtn) themeBtn.onclick = () => {};
+
+// Typing animation
+const phrases = [
+  'Where Innovation Meets Excellence',
+  'Shaping Engineers of Tomorrow',
+  'NAAC Accredited · AICTE Approved',
+  'Top Placement Record · Chennai'
+];
+let pi = 0, ci = 0, del = false;
+const el = document.getElementById('typing-text');
+function typeLoop() {
+  const phrase = phrases[pi];
+  if (!del) {
+    el.textContent = phrase.slice(0, ci++);
+    if (ci > phrase.length) { del = true; setTimeout(typeLoop, 2000); return; }
+  } else {
+    el.textContent = phrase.slice(0, ci--);
+    if (ci < 0) { del = false; pi = (pi + 1) % phrases.length; ci = 0; }
+  }
+  setTimeout(typeLoop, del ? 40 : 80);
+}
+setTimeout(typeLoop, 2000);
+
+// Animated Counters
+const counterEls = document.querySelectorAll('.counter');
+const counterObserver = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const el = entry.target;
+      const target = parseInt(el.dataset.target);
+      let current = 0;
+      const step = Math.ceil(target / 60);
+      const timer = setInterval(() => {
+        current = Math.min(current + step, target);
+        el.textContent = current.toLocaleString();
+        if (current >= target) clearInterval(timer);
+      }, 30);
+      counterObserver.unobserve(el);
+    }
+  });
+}, { threshold: 0.5 });
+counterEls.forEach(el => counterObserver.observe(el));
+
+// Dept filter
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const filter = btn.dataset.filter;
+    document.querySelectorAll('.dept-card').forEach(card => {
+      const cats = card.dataset.cat || '';
+      card.classList.toggle('hidden', filter !== 'all' && !cats.includes(filter));
+    });
+  });
+});
+
+// Table sort
+let sortDir = {};
+function sortTable(col) {
+  const table = document.getElementById('fee-table');
+  const tbody = table.tBodies[0];
+  const rows = Array.from(tbody.rows);
+  const dir = sortDir[col] = !(sortDir[col]);
+  rows.sort((a, b) => {
+    let va = a.cells[col].textContent.trim();
+    let vb = b.cells[col].textContent.trim();
+    const numA = parseFloat(va.replace(/[^\d.]/g, ''));
+    const numB = parseFloat(vb.replace(/[^\d.]/g, ''));
+    if (!isNaN(numA) && !isNaN(numB)) return dir ? numA - numB : numB - numA;
+    return dir ? va.localeCompare(vb) : vb.localeCompare(va);
+  });
+  rows.forEach(r => tbody.appendChild(r));
+}
+
+// Lightbox
+function openLightbox(src) {
+  document.getElementById('lightbox-img').src = src;
+  document.getElementById('lightbox').classList.add('open');
+}
+function closeLightbox(e) {
+  if (!e || e.target !== document.getElementById('lightbox-img')) {
+    document.getElementById('lightbox').classList.remove('open');
+  }
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    document.getElementById('lightbox').classList.remove('open');
+    document.getElementById('apply-modal').classList.remove('open');
+  }
+});
+
+// Form validation helpers
+function validateEmail(e) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e); }
+function showError(id, show) {
+  document.getElementById(id).classList.toggle('show', show);
+}
+
+// Contact form
+function submitContactForm() {
+  const name = document.getElementById('cf-name').value.trim();
+  const email = document.getElementById('cf-email').value.trim();
+  const subject = document.getElementById('cf-subject').value.trim();
+  const message = document.getElementById('cf-message').value.trim();
+  let valid = true;
+  showError('err-name', !name); if (!name) valid = false;
+  showError('err-email', !validateEmail(email)); if (!validateEmail(email)) valid = false;
+  showError('err-subject', !subject); if (!subject) valid = false;
+  showError('err-message', !message); if (!message) valid = false;
+  if (valid) document.getElementById('form-success').style.display = 'block';
+}
+
+// Apply modal
+function submitApplication() {
+  const name = document.getElementById('m-name').value.trim();
+  const email = document.getElementById('m-email').value.trim();
+  const program = document.getElementById('m-program').value;
+  let valid = true;
+  showError('m-err-name', !name); if (!name) valid = false;
+  showError('m-err-email', !validateEmail(email)); if (!validateEmail(email)) valid = false;
+  showError('m-err-program', !program); if (!program) valid = false;
+  if (valid) document.getElementById('m-success').style.display = 'block';
+}
+
+// AI Chatbot
+function toggleChat() {
+  document.getElementById('chatbot-window').classList.toggle('open');
+}
+
+const chatKB = {
+  'fee': 'Annual fees range from ₹70,000 (M.E.) to ₹95,000 (AI & DS). Scholarships are available for merit and SC/ST candidates.',
+  'eligibility': 'For B.E/B.Tech: 10+2 with PCM, min 45% aggregate. For M.E: B.E/B.Tech in relevant branch with min 50%.',
+  'hostel': 'Yes! We have separate boys\' and girls\' hostels with 24/7 security, mess, Wi-Fi and study rooms.',
+  'placement': 'Our placement rate is 80.28% with top recruiters like TCS, Infosys, Wipro, HCL, Cognizant, Zoho and more.',
+  'counseling': 'Our TNEA Counseling Code is 1442. Enter this code during TNEA counseling to select PDKVCET.',
+  'course': 'We offer B.E. CSE, B.E. CSE (Cyber Security), B.E. Biomedical Engineering, B.Tech AI & Data Sciences, and M.E. CSE.',
+  'contact': 'Call us at 044-2499 1414 or 9840100400. Email: prince@princedrkvasudevan.com',
+  'location': 'We are at Medavakkam-Mambakkam Road, Ponmar, Chennai – 600 127. Well-connected by college buses.',
+  'naac': 'Yes, PDKVCET is NAAC Accredited and AICTE Approved, affiliated with Anna University, Chennai.',
+  'transport': 'College buses cover Chennai, Tambaram, OMR, ECR and surrounding areas. GPS-tracked routes available.',
+};
+
+function sendChat() {
+  const input = document.getElementById('chat-input');
+  const msg = input.value.trim();
+  if (!msg) return;
+  const messages = document.getElementById('chat-messages');
+  messages.innerHTML += `<div class="chat-msg user">${msg}</div>`;
+  input.value = '';
+  const dots = document.createElement('div');
+  dots.className = 'chat-msg bot'; dots.id = 'typing';
+  dots.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>';
+  messages.appendChild(dots);
+  messages.scrollTop = messages.scrollHeight;
+  setTimeout(() => {
+    dots.remove();
+    const lower = msg.toLowerCase();
+    let reply = "I'm not sure about that. Please call us at 044-2499 1414 or email prince@princedrkvasudevan.com for more details!";
+    for (const [key, val] of Object.entries(chatKB)) {
+      if (lower.includes(key)) { reply = val; break; }
+    }
+    messages.innerHTML += `<div class="chat-msg bot">${reply}</div>`;
+    messages.scrollTop = messages.scrollHeight;
+  }, 900);
+}
+
+// Company Logo Carousel
+let currentLogoIndex = 0;
+const totalLogos = 10;
+let autoScrollTimeout;
+
+function updateLogoCarousel() {
+  // Update slides
+  document.querySelectorAll('.logo-slide').forEach((slide, idx) => {
+    slide.classList.remove('active', 'prev');
+    if (idx === currentLogoIndex) {
+      slide.classList.add('active');
+    } else if (idx === (currentLogoIndex - 1 + totalLogos) % totalLogos) {
+      slide.classList.add('prev');
+    }
+  });
+
+  // Update dots
+  document.querySelectorAll('.carousel-dot').forEach((dot, idx) => {
+    dot.classList.toggle('active', idx === currentLogoIndex);
+  });
+
+  resetAutoScroll();
+}
+
+function nextLogo() {
+  currentLogoIndex = (currentLogoIndex + 1) % totalLogos;
+  updateLogoCarousel();
+}
+
+function prevLogo() {
+  currentLogoIndex = (currentLogoIndex - 1 + totalLogos) % totalLogos;
+  updateLogoCarousel();
+}
+
+function goToLogo(index) {
+  currentLogoIndex = index;
+  updateLogoCarousel();
+}
+
+function autoScroll() {
+  nextLogo();
+}
+
+function resetAutoScroll() {
+  clearTimeout(autoScrollTimeout);
+  autoScrollTimeout = setTimeout(autoScroll, 4000);
+}
+
+// Start auto-scroll when page loads
+document.addEventListener('DOMContentLoaded', () => {
+  resetAutoScroll();
+});
+
+// Stop auto-scroll when user interacts
+document.querySelector('.carousel-arrow.prev').addEventListener('click', (e) => {
+  e.stopPropagation();
+  prevLogo();
+});
+
+document.querySelector('.carousel-arrow.next').addEventListener('click', (e) => {
+  e.stopPropagation();
+  nextLogo();
+});
+
+document.querySelectorAll('.carousel-dot').forEach(dot => {
+  dot.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const idx = Number(dot.dataset.index);
+    goToLogo(idx);
+  });
+});
+
+// Image load error handling: show text fallback when logos are missing
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.logo-slide img').forEach(img => {
+    img.addEventListener('error', () => {
+      const alt = img.alt || 'Partner';
+      const parent = img.parentElement;
+      console.warn('Logo failed to load:', img.src);
+      parent.innerHTML = `<div class="logo-fallback">${alt.replace(/ Logo$/i, '')}</div>`;
+    });
+  });
+});
+</script>
+</body>
+</html>
